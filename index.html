@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css"> 
+        <title>Code Breaker</title>
+    </head>
+    <body>
+        <h1>Code Breaker</h1>
+        <p class="description">As an international sneak thief, you break into vaults all the time. Riddling out a simple 3 digit
+            code is child's play for you. But you must be getting sloppy in your old age because you've
+            tripped an alarm. In no time at all, the police will be all over the place. Can you get into the vault
+            before they arrive? Break into the vault within 7 tries!</p>
+        
+        <div class="center">
+            <div id="timer">
+                <p id="clock"></p>
+            </div>
+            
+            <div id="vault">
+                <p id="currentGuess"></p>
+                <button id="one">1</button>
+                <button id="two">2</button>
+                <button id="three">3</button>
+                <button id="clear">Clear</button>
+            </div>
+            <h2 id="hint"></h2>
+        </div>
+        
+        <script src="index.js"></script>
+    </body>
+</html>
