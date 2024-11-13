@@ -7,42 +7,76 @@ let clear = document.getElementById("clear")
 let timer = document.getElementById("timer")
 let clock = document.getElementById("clock")
 let hint = document.getElementById("hint")
+let missionOperation = document.getElementById("missionOperation")
+let background = document.getElementById("background")
+
 
 let randomDigit1 = Math.floor(Math.random() * 3 + 1)
 let randomDigit2 = Math.floor(Math.random() * 3 + 1)
 let randomDigit3 = Math.floor(Math.random() * 3 + 1)
 let randomNum = `${randomDigit1}${randomDigit2}${randomDigit3}`
 
+
 let isWin = false
 let isLose = false
+
+
+
+
+// localStorage that stores how many time the player wins
+let numOfSuccess = 0
+
+
+if (localStorage.getItem("numOfSuccess")) {
+    numOfSuccess = localStorage.getItem("numOfSuccess")
+} else {
+    localStorage.setItem("numOfSuccess", numOfSuccess)
+}
+
+
+missionOperation.textContent = "Number of successful mission operation: " + numOfSuccess
+
+
+
 
 // initialize guessesLeft
 let guessesLeft = 7
 clock.textContent = guessesLeft
 
+
 // when the 1, 2, 3 buttons are clicked, it will append its corresponding number to the currentGuess element
 oneBtn.addEventListener("click", function() {
-    appendNum(1)
+    if (!isWin || !isLose) {
+        appendNum(1)
+    }
 })
+
 
 twoBtn.addEventListener("click", function() {
-    appendNum(2)
+    if (!isWin || !isLose) {
+        appendNum(2)
+    }
 })
 
+
 threeBtn.addEventListener("click", function() {
-    appendNum(3)
+    if (!isWin || !isLose) {
+        appendNum(3)
+    }
 })
+
 
 function appendNum(num) {
     if (displayCurrentGuess.textContent.length < 3) {
         displayCurrentGuess.append(num)
     }
-    
+   
     if (displayCurrentGuess.textContent.length == 3) {
         matchGuess()
     }
-    
+   
 }
+
 
 // when the clear button is clicked, it will clear the content in the currentGuess element
 clear.addEventListener("click", function() {
@@ -51,8 +85,9 @@ clear.addEventListener("click", function() {
     } else {
         displayCurrentGuess.textContent = ""
     }
-    
+   
 })
+
 
 function matchGuess() {
     if (displayCurrentGuess.textContent == randomNum) {
@@ -60,10 +95,15 @@ function matchGuess() {
         let winMessage = document.createElement("p")
         winMessage.textContent = "You win!"
         hint.append(winMessage) // append the message to the end of the log
+        numOfSuccess++
+        missionOperation.textContent = "Number of successful mission operation: " + numOfSuccess
+        localStorage.setItem("numOfSuccess", numOfSuccess) // save to localStorage
+        background.setAttribute("style", "background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220814/pngtree-heap-of-money-raining-down-from-above-success-cash-money-photo-image_6439052.jpg')")
     } else {
         guessesLeft--
         timerMoving(guessesLeft)
         clock.textContent = guessesLeft
+
 
         // if there are 0 guess left, then the user loses
         if (guessesLeft == 0) {
@@ -71,10 +111,12 @@ function matchGuess() {
             loseMessage.textContent = "You lose!"
             hint.append(loseMessage)
             isLose = true
+            background.setAttribute("style", "background-image: url('https://t3.ftcdn.net/jpg/06/49/11/00/360_F_649110054_ZnMGBRFXklYBXpRmDR2uiMWrb9okjjJI.jpg')")
         } else {
             // parse displayCurrentGuess and randomNum into integer instead of string
             let displayCurrentGuessInt = parseInt(displayCurrentGuess.textContent)
             let randomNumInt = parseInt(randomNum)
+
 
             if (displayCurrentGuessInt > randomNumInt) {
                 let tooHigh = document.createElement("p")
@@ -87,10 +129,12 @@ function matchGuess() {
             }
         }
 
+
         displayCurrentGuess.textContent = ""
-        
+       
     }
 }
+
 
 function reset() {
     guessesLeft = 7
@@ -104,15 +148,19 @@ function reset() {
     isWin = false
     isLose = false
     timer.removeAttribute("style")
-    console.log(randomNum)
+    background.removeAttribute("style")
+    // console.log(randomNum)
 }
+
 
 // countdown
 function timerMoving(guessesLeft) {
     // evenly divide the circle to 7 pieces
     let percent = 100 - ((guessesLeft/7) * 100) + "%"
     // turn 1/7 of the circle gray every time the user guesses it wrong
+    // Source: https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient
     timer.setAttribute("style", "background: conic-gradient(#7e7e7e 0 " + percent + ", #FBFAF5 " + percent)
 }
 
-console.log(randomNum)
+
+// console.log(randomNum)
