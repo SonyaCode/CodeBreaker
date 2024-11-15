@@ -10,18 +10,13 @@ let hint = document.getElementById("hint")
 let missionOperation = document.getElementById("missionOperation")
 let background = document.getElementById("background")
 
-
 let randomDigit1 = Math.floor(Math.random() * 3 + 1)
 let randomDigit2 = Math.floor(Math.random() * 3 + 1)
 let randomDigit3 = Math.floor(Math.random() * 3 + 1)
 let randomNum = `${randomDigit1}${randomDigit2}${randomDigit3}`
 
-
 let isWin = false
 let isLose = false
-
-
-
 
 // localStorage that stores how many time the player wins
 let numOfSuccess = 0
@@ -33,11 +28,7 @@ if (localStorage.getItem("numOfSuccess")) {
     localStorage.setItem("numOfSuccess", numOfSuccess)
 }
 
-
 missionOperation.textContent = "Number of successful mission operation: " + numOfSuccess
-
-
-
 
 // initialize guessesLeft
 let guessesLeft = 7
@@ -91,27 +82,37 @@ clear.addEventListener("click", function() {
 
 function matchGuess() {
     if (displayCurrentGuess.textContent == randomNum) {
-        isWin = true
-        let winMessage = document.createElement("p")
-        winMessage.textContent = "You win!"
-        hint.append(winMessage) // append the message to the end of the log
-        numOfSuccess++
+        if (!isWin) {
+            isWin = true
+            numOfSuccess++
+            let winMessage = document.createElement("p")
+            winMessage.textContent = "You win! Click clear to play again!"
+            hint.append(winMessage) // append the message to the end of the log
+        }
+
+
         missionOperation.textContent = "Number of successful mission operation: " + numOfSuccess
         localStorage.setItem("numOfSuccess", numOfSuccess) // save to localStorage
-        background.setAttribute("style", "background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220814/pngtree-heap-of-money-raining-down-from-above-success-cash-money-photo-image_6439052.jpg')")
+        // cash background
+        background.setAttribute("style", "background-image: url('https://wallpapercave.com/wp/wp1949062.jpg')")
     } else {
-        guessesLeft--
-        timerMoving(guessesLeft)
-        clock.textContent = guessesLeft
-
+        if (!isLose) {
+            guessesLeft--
+            timerMoving(guessesLeft)
+            clock.textContent = guessesLeft
+        }
+        
 
         // if there are 0 guess left, then the user loses
         if (guessesLeft == 0) {
-            let loseMessage = document.createElement("p")
-            loseMessage.textContent = "You lose!"
-            hint.append(loseMessage)
-            isLose = true
-            background.setAttribute("style", "background-image: url('https://t3.ftcdn.net/jpg/06/49/11/00/360_F_649110054_ZnMGBRFXklYBXpRmDR2uiMWrb9okjjJI.jpg')")
+            if (!isLose) {
+                isLose = true
+                let loseMessage = document.createElement("p")
+                loseMessage.textContent = "You lose! Click clear to play again!"
+                hint.append(loseMessage)
+            }
+            // police car background
+            background.setAttribute("style", "background-image: url('https://conduciendo.com/wp-content/uploads/2017/10/15367.jpg')")
         } else {
             // parse displayCurrentGuess and randomNum into integer instead of string
             let displayCurrentGuessInt = parseInt(displayCurrentGuess.textContent)
@@ -149,7 +150,6 @@ function reset() {
     isLose = false
     timer.removeAttribute("style")
     background.removeAttribute("style")
-    // console.log(randomNum)
 }
 
 
